@@ -1,3 +1,6 @@
+
+import 'dart:io';
+
 import 'package:chat_appication_vs/components/chat_bubble.dart';
 import 'package:chat_appication_vs/components/my_text_field.dart';
 import 'package:chat_appication_vs/services/chat/chat_service.dart';
@@ -6,6 +9,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:image_picker/image_picker.dart';
 
 class ChatPage extends StatefulWidget {
   final String receiveruserEmail;
@@ -24,6 +28,8 @@ class _ChatPageState extends State<ChatPage> {
   final ChatService _chatService = ChatService();
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
 
+  File? galleryFile;
+  final picker = ImagePicker();
   void sendMessage() async {
     if (_messageController.text.isNotEmpty) {
       await _chatService.sendMessage(
@@ -102,6 +108,13 @@ class _ChatPageState extends State<ChatPage> {
   Widget _buildUserInput() {
     return Row(
       children: [
+        IconButton(
+          onPressed: sendMessage,
+          icon: const Icon(
+            Icons.image,
+            size: 20,
+          ),
+        ),
         //textfield
         Expanded(
             child: MyTextField(
@@ -110,13 +123,67 @@ class _ChatPageState extends State<ChatPage> {
           obscureText: false,
         )),
         IconButton(
-          onPressed: sendMessage,
+          onPressed: (){
+            _showPicker(context: context);
+          },
           icon: const Icon(
             Icons.send,
             size: 30,
           ),
-        )
+        ),
+
       ],
     );
   }
+   _showPicker({
+    required BuildContext context,
+  }) {
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return SafeArea(
+          child: Wrap(
+            children: <Widget>[
+              ListTile(
+                leading: const Icon(Icons.photo_library),
+                title: const Text('Photo Library'),
+                onTap: () {
+                  getImage(ImageSource.gallery);
+                  Navigator.of(context).pop();
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.photo_camera),
+                title: const Text('Camera'),
+                onTap: () {
+                  getImage(ImageSource.camera);
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  Future getImage(
+      ImageSource img,
+      ) async {
+    final pickedFile = await picker.pickImage(source: img);
+    XFile? xfilePick = pickedFile;
+    setState(
+          () {
+        if (xfilePick != null) {
+          // galleryFile = File(pickedFile!.path);
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(// is this context <<<
+              const SnackBar(content: Text('Nothing is selected')));
+        }
+      },
+    );
+  }
+
+
+
 }
