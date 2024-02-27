@@ -39,7 +39,7 @@ class _ChatPageState extends State<ChatPage> {
       appBar: AppBar(title:
       Row(
         children: [
-          SizedBox(width: 70,),
+
           Center(child: Text(widget.receiveruserEmail,textAlign:TextAlign.center,)),
         ],
       )),
@@ -90,7 +90,8 @@ class _ChatPageState extends State<ChatPage> {
          crossAxisAlignment:rl? CrossAxisAlignment.end :CrossAxisAlignment.start ,
          children: [
            Text(data['senderEmail']),
-           ChatBubble(message: data['message'])
+           ChatBubble(message: data['message']),
+
 
          ],
        ),
