@@ -109,7 +109,9 @@ class _ChatPageState extends State<ChatPage> {
     return Row(
       children: [
         IconButton(
-          onPressed: sendMessage,
+          onPressed:  (){
+      _showPicker(context: context);
+    },
           icon: const Icon(
             Icons.image,
             size: 20,
@@ -123,9 +125,7 @@ class _ChatPageState extends State<ChatPage> {
           obscureText: false,
         )),
         IconButton(
-          onPressed: (){
-            _showPicker(context: context);
-          },
+          onPressed: sendMessage,
           icon: const Icon(
             Icons.send,
             size: 30,
