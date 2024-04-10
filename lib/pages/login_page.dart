@@ -28,6 +28,7 @@ class _LoginPageState extends State<LoginPage> {
     if(user!=null){
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Login Successfully")));
 
+
       print("Login Successfully");
       Navigator.pushNamed(context, "/Home");
     }else{
